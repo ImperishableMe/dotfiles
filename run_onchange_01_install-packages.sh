@@ -10,15 +10,18 @@ log() {
 }
 
 ask_sudo() {
-  log "running this script would need 'sudo' permission."
-  echo ""
+	log "running this script would need 'sudo' permission."
+	echo ""
 
-  sudo -v
+	sudo -v
 
-  # keep sudo permission fresh
-  while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+	# keep sudo permission fresh
+	while true; do
+		sudo -n true
+		sleep 60
+		kill -0 "$$" || exit
+	done 2>/dev/null &
 }
-
 
 exist brew || {
 	log "brew not found. Breaking out..."
@@ -29,25 +32,26 @@ exist brew || {
 # https://ohmyz.sh/#install
 install_oh_my_zsh() {
 	if ! [ -d ~/.oh-my-zsh ]; then
-		log "Installing Oh My Zsh"
-		sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+		log "Installing Oh My Zsh" sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-		# Install zsh-autosuggestions
-		# https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh
-		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions 2>/dev/null
-
-		# Install zsh-syntax-highlighting
-		# https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh
-		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting 2>/dev/null
-
-		# Install zsh-history-substring-search plugin
-		# https://github.com/zsh-users/zsh-history-substring-search
-		git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
-
-		# Install p10k
-		# https://github.com/romkatv/powerlevel10k#homebrew
-		brew install powerlevel10k --quiet
 	fi
+	# Install zsh-autosuggestions
+	# https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh
+	git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions 2>/dev/null
+
+	# Install zsh-syntax-highlighting
+	# https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting 2>/dev/null
+
+	# Install zsh-history-substring-search plugin
+	# https://github.com/zsh-users/zsh-history-substring-search
+	git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+
+	# Install fzf-zsh-plugin
+	git clone --depth 1 https://github.com/unixorn/fzf-zsh-plugin.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-zsh-plugin
+	# Install p10k
+	# https://github.com/romkatv/powerlevel10k#homebrew
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 }
 
 install_brew_packages() {
@@ -59,7 +63,6 @@ install_brew_packages() {
 	brewfile='
 	tap "codecrafters-io/tap"
 	tap "homebrew/bundle"
-	tap "homebrew/cask-fonts"
 	tap "jesseduffield/lazygit"
 	# General-purpose data compression with high compression ratio
 	brew "xz"
@@ -111,8 +114,6 @@ install_brew_packages() {
 	brew "codecrafters-io/tap/codecrafters"
 	# A simple terminal UI for git commands, written in Go
 	brew "jesseduffield/lazygit/lazygit"
-	# Cross platform SQL editor and database management app
-	cask "beekeeper-studio"
 	cask "font-fira-mono-nerd-font"
 	cask "font-jetbrains-mono"
 	cask "font-jetbrains-mono-nerd-font"
@@ -192,10 +193,7 @@ install_brew_packages() {
 	vscode "visualstudioexptteam.intellicode-api-usage-examples"
 	vscode "visualstudioexptteam.vscodeintellicode"
 	vscode "vscodevim.vim"
-	vscode "wholroyd.jinja"
-	vscode "zhuangtongfa.material-theme"
 	'
-
 	brew_bundle
 }
 
